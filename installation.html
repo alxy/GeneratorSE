@@ -61,8 +61,8 @@
 <p>Supporting python packages: Pandas, Algopy, Zope.interface, Sphinx, Xlrd, PyOpt, py2exe, Pyzmq, Sphinxcontrib-bibtex, Sphinxcontrib-zopeext, Numpydoc, Ipython</p>
 </div></blockquote>
 </div>
-<p>Clone the repository at <a class="reference external" href="https://github.com/WISDEM/DriveSE">https://github.com/WISDEM/DriveSE</a>
-or download the releases and uncompress/unpack (DriveSE.py-0.1.1.tar.gz or DriveSE.py-0.1.1.zip) from the website link at the bottom the <a href="#id1"><span class="problematic" id="id2">`DriveSE site&lt;http://nwtc.nrel.gov/DriveSE&gt;`_</span></a>.</p>
+<p>Clone the repository at <a class="reference external" href="https://github.com/WISDEM/GeneratorSE">https://github.com/WISDEM/GeneratorSE</a>
+or download the releases and uncompress/unpack (GeneratorSE.py-0.1.1.tar.gz or GeneratorSE.py-0.1.1.zip) from the website link at the bottom the <a href="#id1"><span class="problematic" id="id2">`DriveSE site&lt;http://nwtc.nrel.gov/DriveSE&gt;`_</span></a>.</p>
 <p>To install DriveSE, first activate the OpenMDAO environment and then install with the following command.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>plugin install
 </pre></div>
@@ -71,8 +71,10 @@ or download the releases and uncompress/unpack (DriveSE.py-0.1.1.tar.gz or Drive
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">drivese.drive</span>
-<span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">drivese.hub</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">GeneratorSE.PMSG</span>
+<span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">GeneratorSE.EESG</span>
+<span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">GeneratorSE.DFIG</span>
+<span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">GeneratorSE.SCIG</span>
 </pre></div>
 </div>
 <p>or run the unit tests which include functional and gradient tests.  Analytic gradients are provided for variables only so warnings will appear for missing gradients on model input parameters; these can be ignored.</p>
