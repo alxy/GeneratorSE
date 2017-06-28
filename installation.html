@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Installation &#8212; DriveSE 0.1.1 documentation</title>
+    <title>2. Installation &mdash; DriveSE 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/nrel.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,16 +17,14 @@
         VERSION:     '0.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="DriveSE 0.1.1 documentation" href="index.html" />
     <link rel="next" title="3. Tutorial" href="tutorial.html" />
     <link rel="prev" title="1. Introduction" href="intro.html" /> 
   </head>
@@ -43,7 +41,7 @@
         <li class="right" >
           <a href="intro.html" title="1. Introduction"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DriveSE 0.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DriveSE 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -66,19 +64,19 @@
 <p>Clone the repository at <a class="reference external" href="https://github.com/WISDEM/DriveSE">https://github.com/WISDEM/DriveSE</a>
 or download the releases and uncompress/unpack (DriveSE.py-0.1.1.tar.gz or DriveSE.py-0.1.1.zip) from the website link at the bottom the <a href="#id1"><span class="problematic" id="id2">`DriveSE site&lt;http://nwtc.nrel.gov/DriveSE&gt;`_</span></a>.</p>
 <p>To install DriveSE, first activate the OpenMDAO environment and then install with the following command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ plugin install
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>plugin install
 </pre></div>
 </div>
 <p>To check if installation was successful try to import the module from within an activated OpenMDAO environment:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">drivese.drive</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">drivese.drive</span>
 <span class="o">&gt;</span> <span class="kn">import</span> <span class="nn">drivese.hub</span>
 </pre></div>
 </div>
 <p>or run the unit tests which include functional and gradient tests.  Analytic gradients are provided for variables only so warnings will appear for missing gradients on model input parameters; these can be ignored.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python src/test/test_DriveSE.py
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python src/test/test_DriveSE.py
 </pre></div>
 </div>
 <p>An &#8220;OK&#8221; signifies that all the tests passed.</p>
@@ -100,18 +98,21 @@ or download the releases and uncompress/unpack (DriveSE.py-0.1.1.tar.gz or Drive
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.rst.txt"
+      <li><a href="_sources/installation.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -130,13 +131,13 @@ or download the releases and uncompress/unpack (DriveSE.py-0.1.1.tar.gz or Drive
         <li class="right" >
           <a href="intro.html" title="1. Introduction"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DriveSE 0.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DriveSE 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2014, NREL.
+        &copy; Copyright 2014, NREL.
       Last updated on Jun 28, 2017.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
     </div>
   </body>
 </html>
