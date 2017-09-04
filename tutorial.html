@@ -52,13 +52,11 @@
             
   <div class="section" id="tutorial">
 <span id="tutorial-label"></span><h1>3. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>As an example, let us size a direct-drive Permanent Magnet synchronous Generator (PMSG) for the NREL 5MW Reference Model [FAST2009].</p>
+<p>As a frst example, we will size a direct-drive Permanent Magnet synchronous Generator (PMSG) for the NREL 5MW Reference Model [FAST2009].</p>
 <p>The first step is to import the relevant files.</p>
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">generatorse</span> <span class="kn">import</span> <span class="n">DFIG</span>
-<span class="kn">from</span> <span class="nn">DFIG</span> <span class="kn">import</span> <span class="n">drive_DFIG</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">generatorse.PMSG_arms</span>
+<span class="kn">import</span> <span class="nn">generatorse.DFIG</span>
+
 
 </pre></div>
 </div>
@@ -69,37 +67,42 @@ objective(Costs,Mass, Efficiency or Aspect ratio) and driver determines the fina
 terminal voltage and constraints imposed on the dimensions and electrical,magnetic and structural deformations. The excitation requirement (e.g., magnet dimensions,pole pairs)
 is determined in accordance with the required voltage at no-load.</p>
 <div class="highlight-python"><div class="highlight"><pre>
-<span class="c"># simple test of DFIG</span>
+<span class="c">## Initial design variables for a DD PMSG designed for a 5MW turbine</span>
 
-<span class="c"># for a 5 MW turbine</span>
+<span class="n">opt_problem</span> <span class="o">=</span> <span class="n">Drive_PMSG_arms</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;Costs&#39;</span><span class="p">)</span> <span class="c"># Optimiser and Objective function</span>
+	
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">P_rated</span><span class="o">=</span><span class="mf">5.0e6</span>             								<span class="c"># Rated power  </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">T_rated</span><span class="o">=</span><span class="mf">4.143289e6</span>												<span class="c"># Rated torque (Nm)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">N</span><span class="o">=</span><span class="mf">12.1</span>                    								<span class="c"># Rated speed (rpm)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span> <span class="o">=</span> <span class="mi">93</span>														<span class="c"># Target design efficiency %</span>
 
-<span class="n">opt_problem</span> <span class="o">=</span> <span class="n">Drive_DFIG</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;Costs&#39;</span><span class="p">)</span>   <span class="c"># Choose an Optimiser[COBYLAdriver, CONMINdriver,NEWSUMTdriver,SLSQPdriver,Genetic] and Objective function [Mass, Costs, Losses or Aspect ratio]</span>
-
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span><span class="o">=</span><span class="mi">93</span>                          <span class="c"># provide a target drivetrain Efficiency</span>
-
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_P_rated</span><span class="o">=</span><span class="mf">5e6</span>											 <span class="c"># Turbine rating</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_N_rated</span><span class="o">=</span><span class="mi">1200</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">Gearbox_efficiency</span><span class="o">=</span><span class="mf">0.955</span>							 <span class="c"># Gearbox Efficiency</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_N_rated</span><span class="o">=</span><span class="mi">1200</span>                      <span class="c"># The rated speed ( derived from Gear ratio)</span>
-
-<span class="c"># Initial design dimensions</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_r_s</span><span class="o">=</span> <span class="mf">0.65</span> <span class="c">#meter</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_l_s</span><span class="o">=</span> <span class="mf">0.6</span> <span class="c">#meter</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_s</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c">#meter</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_r</span> <span class="o">=</span> <span class="mf">0.065</span> <span class="c">#meter</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_I_0</span> <span class="o">=</span> <span class="mi">32</span> <span class="c">#Ampere                  # Excitation Current</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_B_symax</span> <span class="o">=</span> <span class="mf">1.3</span> <span class="c">#Tesla</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_S_Nmax</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3</span>  <span class="c">#Tesla</span>
-
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_r_s</span><span class="o">=</span> <span class="mf">3.26</span>														<span class="c"># Air gap radius (meter)               </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_l_s</span><span class="o">=</span> <span class="mf">1.6</span>															<span class="c"># core length (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_h_s</span> <span class="o">=</span> <span class="mf">0.07</span>														<span class="c"># Stator slot height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_tau_p</span> <span class="o">=</span> <span class="mf">0.08</span>													<span class="c"># Pole pitch (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_h_m</span> <span class="o">=</span> <span class="mf">0.009</span>													<span class="c"># Magnet height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_h_ys</span> <span class="o">=</span> <span class="mf">0.0615</span>												<span class="c"># Stator yoke height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_h_yr</span> <span class="o">=</span> <span class="mf">0.057</span>													<span class="c"># Rotor yoke height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_n_s</span> <span class="o">=</span> <span class="mi">5</span>															<span class="c"># Stator arms</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_b_st</span> <span class="o">=</span> <span class="mf">0.480</span>													<span class="c"># Stator circumferential arm dimension (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_n_r</span> <span class="o">=</span><span class="mi">5</span>																<span class="c"># Rotor arms</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_b_r</span> <span class="o">=</span> <span class="mf">0.520</span>													<span class="c"># Rotor circumferential arm dimension (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_d_r</span> <span class="o">=</span> <span class="mf">0.7</span>														<span class="c"># Rotor axial arm dimension (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_d_s</span><span class="o">=</span> <span class="mf">0.3</span>															<span class="c"># Stator axial arm dimension (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_t_wr</span> <span class="o">=</span><span class="mf">0.06</span>														<span class="c"># Rotor arm thickness (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_t_ws</span> <span class="o">=</span><span class="mf">0.06</span>														<span class="c"># Stator arm thickness (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_R_o</span> <span class="o">=</span><span class="mf">0.43</span>      											<span class="c"># Main shaft radius (meter)</span>
 
 <span class="c"># Specific costs</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>                  <span class="c"># Unit cost of Copper $/kg</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fe</span>	<span class="o">=</span> <span class="mf">0.556</span>                    <span class="c"># Unit cost of Iron $/kg</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fes</span> <span class="o">=</span><span class="mf">0.50139</span>                   <span class="c"># specific cost of structure</span>
-	
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>                  						<span class="c"># Unit cost of Copper $/kg</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fe</span>	<span class="o">=</span> <span class="mf">0.556</span>                    					<span class="c"># Unit cost of Iron/magnetic steel $/kg</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fes</span> <span class="o">=</span><span class="mf">0.50139</span>                   					<span class="c"># specific cost of structural steel</span>
+
 <span class="c">#Material properties</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fe</span> <span class="o">=</span> <span class="mi">7700</span>                 <span class="c">#Steel density</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Copper</span> <span class="o">=</span><span class="mi">8900</span>                  <span class="c"># Kg/m3 copper density</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fe</span> <span class="o">=</span> <span class="mi">7700</span>                 						<span class="c"># magnetic Steel density</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Copper</span> <span class="o">=</span><span class="mi">8900</span>              						<span class="c"># Kg/m3 copper density</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_PM</span> <span class="o">=</span><span class="mi">7450</span>                  						<span class="c"># Kg/m3 magnet density</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fes</span> <span class="o">=</span><span class="mi">7850</span>                  						<span class="c"># Kg/m3 structural steel density</span>
 
 </pre></div>
 </div>
@@ -111,19 +114,16 @@ is determined in accordance with the required voltage at no-load.</p>
 </div>
 <p>The resulting system and component properties can then be printed.</p>
 <div class="highlight-python"><div class="highlight"><pre>
-<span class="k">print</span> <span class="s">&quot;Estimate of Hub Component Sizes for the NREL 5 MW Reference Turbine&quot;</span>
-<span class="k">print</span> <span class="s">&quot;Hub Components&quot;</span>
-<span class="k">print</span> <span class="s">&#39;  Hub: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>  <span class="c"># 31644.47</span>
-<span class="k">print</span> <span class="s">&#39;  Pitch system: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">pitchSystem</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span> <span class="c"># 17003.98</span>
-<span class="k">print</span> <span class="s">&#39;  Nose cone: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">spinner</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span> <span class="c"># 1810.50</span>
-<span class="k">print</span> <span class="s">&#39;Hub system total: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_mass</span><span class="p">)</span> <span class="c"># 50458.95</span>
-<span class="k">print</span> <span class="s">&#39;    cm {0:6.2f} {1:6.2f} {2:6.2f} [m, m, m]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_cm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_cm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_cm</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;    I {0:6.1f} {1:6.1f} {2:6.1f} [kg*m^2, kg*m^2, kg*m^2]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_I</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_I</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hubS</span><span class="o">.</span><span class="n">hub_system_I</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="k">print</span>
+raw_data = {&#39;Parameters&#39;: [&#39;Rating&#39;,&#39;Stator Arms&#39;, &#39;Stator Axial arm dimension&#39;,&#39;Stator Circumferential arm dimension&#39;,&#39; Stator arm Thickness&#39; ,&#39;Rotor arms&#39;,&#39;Rotor Axial arm dimension&#39;,&#39;Rotor Circumferential arm dimension&#39; ,&#39;Rotor arm Thickness&#39;,&#39; Stator Radial deflection&#39;, &#39;Stator Axial deflection&#39;,&#39;Stator circum deflection&#39;,&#39; Rotor Radial deflection&#39;, &#39;Rotor Axial deflection&#39;,&#39;Rotor circum deflection&#39;, &#39;Air gap diameter&#39;,&#39;Overall Outer diameter&#39;, &#39;Stator length&#39;, &#39;l/d ratio&#39;,&#39;Slot_aspect_ratio&#39;,&#39;Pole pitch&#39;, &#39;Stator slot height&#39;,&#39;Stator slotwidth&#39;,&#39;Stator tooth width&#39;, &#39;Stator yoke height&#39;, &#39;Rotor yoke height&#39;, &#39;Magnet height&#39;, &#39;Magnet width&#39;, &#39;Peak air gap flux density fundamental&#39;,&#39;Peak stator yoke flux density&#39;,&#39;Peak rotor yoke flux density&#39;,&#39;Flux density above magnet&#39;,&#39;Maximum Stator flux density&#39;,&#39;Maximum tooth flux density&#39;,&#39;Pole pairs&#39;, &#39;Generator output frequency&#39;, &#39;Generator output phase voltage&#39;, &#39;Generator Output phase current&#39;, &#39;Stator resistance&#39;,&#39;Synchronous inductance&#39;, &#39;Stator slots&#39;,&#39;Stator turns&#39;,&#39;Conductor cross-section&#39;,&#39;Stator Current density &#39;,&#39;Specific current loading&#39;,&#39;Generator Efficiency &#39;,&#39;Iron mass&#39;,&#39;Magnet mass&#39;,&#39;Copper mass&#39;,&#39;Mass of Arms&#39;, &#39;Total Mass&#39;, &#39;Stator Mass&#39;,&#39;Rotor Mass&#39;,&#39;Total Material Cost&#39;],
+			&#39;Values&#39;: [opt_problem.PMSG.P_gennom/1000000,opt_problem.PMSG.n_s,opt_problem.PMSG.d_s*1000,opt_problem.PMSG.b_st*1000,opt_problem.PMSG.t_ws*1000,opt_problem.PMSG.n_r,opt_problem.PMSG.d_r*1000,opt_problem.PMSG.b_r*1000,opt_problem.PMSG.t_wr*1000,opt_problem.PMSG.Stator_delta_radial*1000,opt_problem.PMSG.Stator_delta_axial*1000,opt_problem.PMSG.Stator_circum*1000,opt_problem.PMSG.Rotor_delta_radial*1000,opt_problem.PMSG.Rotor_delta_axial*1000,opt_problem.PMSG.Rotor_circum*1000,2*opt_problem.PMSG.r_s,opt_problem.PMSG.R_out*2,opt_problem.PMSG.l_s,opt_problem.PMSG.K_rad,opt_problem.PMSG.Slot_aspect_ratio,opt_problem.PMSG.tau_p*1000,opt_problem.PMSG.h_s*1000,opt_problem.PMSG.b_s*1000,opt_problem.PMSG.b_t*1000,opt_problem.PMSG.t_s*1000,opt_problem.PMSG.t*1000,opt_problem.PMSG.h_m*1000,opt_problem.PMSG.b_m*1000,opt_problem.PMSG.B_g,opt_problem.PMSG.B_symax,opt_problem.PMSG.B_rymax,opt_problem.PMSG.B_pm1,opt_problem.PMSG.B_smax,opt_problem.PMSG.B_tmax,opt_problem.PMSG.p,opt_problem.PMSG.f,opt_problem.PMSG.E_p,opt_problem.PMSG.I_s,opt_problem.PMSG.R_s,opt_problem.PMSG.L_s,opt_problem.PMSG.S,opt_problem.PMSG.N_s,opt_problem.PMSG.A_Cuscalc,opt_problem.PMSG.J_s,opt_problem.PMSG.A_1/1000,opt_problem.PMSG.gen_eff,opt_problem.PMSG.Iron/1000,opt_problem.PMSG.mass_PM/1000,opt_problem.PMSG.M_Cus/1000,opt_problem.PMSG.Inactive/1000,opt_problem.PMSG.M_actual/1000,opt_problem.PMSG.Stator/1000,opt_problem.PMSG.Rotor/1000,opt_problem.PMSG.Costs/1000],
+				&#39;Limit&#39;: [&#39;&#39;,&#39;&#39;,&#39;&#39;,opt_problem.PMSG.b_all_s*1000,&#39;&#39;,&#39;&#39;,&#39;&#39;,opt_problem.PMSG.b_all_r*1000,&#39;&#39;,opt_problem.PMSG.u_all_s*1000,opt_problem.PMSG.y_all*1000,opt_problem.PMSG.z_all_s*1000,opt_problem.PMSG.u_all_r*1000,opt_problem.PMSG.y_all*1000,opt_problem.PMSG.z_all_r*1000,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(0.2-0.27)&#39;,&#39;(4-10)&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&lt;2&#39;,&#39;&lt;2&#39;,&#39;&lt;2&#39;,opt_problem.PMSG.B_g,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&gt;500&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;3-6&#39;,&#39;60&#39;,&#39;&gt;93%&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;],
+				&#39;Units&#39;:[&#39;MW&#39;,&#39;unit&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;m&#39;,&#39;m&#39;,&#39;m&#39;,&#39;&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;-&#39;,&#39;Hz&#39;,&#39;V&#39;,&#39;A&#39;,&#39;ohm/phase&#39;,&#39;p.u&#39;,&#39;A/mm^2&#39;,&#39;slots&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;kA/m&#39;,&#39;%&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;ton&#39;,&#39;ton&#39;,&#39;k$&#39;]}
+	df=pd.DataFrame(raw_data, columns=[&#39;Parameters&#39;,&#39;Values&#39;,&#39;Limit&#39;,&#39;Units&#39;])
+print df
 
 </pre></div>
 </div>
-<p>The results should appear as below:</p>
+<p>The results should appear as below listing the parameters together with their limits where applicable:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>                              <span class="n">Parameters</span>       <span class="n">Values</span>       <span class="n">Limit</span>      <span class="n">Units</span>
 <span class="go">&gt;&gt;&gt;0                                  Rating     5.000000                     MW</span>
 <span class="go">&gt;&gt;&gt;1                             Stator Arms     5.000000                   unit</span>
@@ -181,115 +181,113 @@ is determined in accordance with the required voltage at no-load.</p>
 <span class="go">&gt;&gt;&gt;53                    Total Material Cost   282.820957                     k$</span>
 </pre></div>
 </div>
-<p>Secondly, we will design a gear driven Doubly fed Induction generator.  The DFIG design
+<p>These result file can be read into the the MATALB script [Par_GeneratorSE_FEMM_PMSG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
+<p>As a second example, we will design a gear driven Doubly fed Induction generator(DFIG).  The DFIG design
 relies on inputs such as machine rating, target overall drivetrain efficiency, gearbox efficiency,
 high speed shaft speed( or gear ratio).It also requires specification of shear stress, material properties( densities), specific material costs.
 The main design variables are initialized with an objective and driver. The designs are computed analytically and checked against predefined constraints
-to meet objective functions.The optimized design dimensions are printed on screen and available in an output file in a Microsoft Excel format.</p>
+to meet objective functions.In addition, calculations of mass properties are also made.
+We now instantiate the DFIG object which automatically updates the mass, costs, efficiency and performance variables based on the supplied inputs.</p>
 <div class="highlight-python"><div class="highlight"><pre>
-<span class="c"># test of drivetrain model</span>
+<span class="c"># # Initial design values for a DFIG designed for a 5MW turbine</span>
 
-<span class="c"># NREL 5 MW Rotor Variables</span>
-<span class="n">nace</span> <span class="o">=</span> <span class="n">Drive4pt</span><span class="p">()</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_diameter</span> <span class="o">=</span> <span class="mf">126.0</span> <span class="c"># m</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_speed</span> <span class="o">=</span> <span class="mf">12.1</span> <span class="c"># #rpm m/s</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">machine_rating</span> <span class="o">=</span> <span class="mf">5000.0</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">DrivetrainEfficiency</span> <span class="o">=</span> <span class="mf">0.95</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_torque</span> <span class="o">=</span>  <span class="mf">1.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">machine_rating</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">nace</span><span class="o">.</span><span class="n">DrivetrainEfficiency</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">rotor_speed</span> <span class="o">*</span> <span class="p">(</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">30</span><span class="p">))</span> <span class="c"># 6.35e6 #4365248.74 # Nm</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_thrust</span> <span class="o">=</span> <span class="mf">599610.0</span> <span class="c"># N</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_mass</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c">#accounted for in F_z # kg</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_speed</span> <span class="o">=</span> <span class="mf">12.1</span> <span class="c">#rpm</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_bending_moment</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16665000.0</span> <span class="c"># Nm same as rotor_bending_moment_y</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_bending_moment_x</span> <span class="o">=</span> <span class="mf">330770.0</span><span class="c"># Nm</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_bending_moment_y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16665000.0</span> <span class="c"># Nm</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_bending_moment_z</span> <span class="o">=</span> <span class="mf">2896300.0</span> <span class="c"># Nm</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_force_x</span> <span class="o">=</span> <span class="mf">599610.0</span> <span class="c"># N</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_force_y</span> <span class="o">=</span> <span class="mf">186780.0</span> <span class="c"># N</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">rotor_force_z</span> <span class="o">=</span> <span class="o">-</span><span class="mf">842710.0</span> <span class="c"># N</span>
+<span class="n">opt_problem</span> <span class="o">=</span> <span class="n">Drive_DFIG</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;Costs&#39;</span><span class="p">)</span>    <span class="c"># Optimiser and Objective function</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span><span class="o">=</span><span class="mi">93</span>														<span class="c"># Target overall drivetrain efficiency             </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_P_rated</span><span class="o">=</span><span class="mf">5e6</span>												<span class="c"># Rated power</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_N_rated</span><span class="o">=</span><span class="mi">1200</span>												<span class="c"># Rated speed</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">Gearbox_efficiency</span><span class="o">=</span><span class="mf">0.955</span>								<span class="c"># Gearbox efficiency</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_r_s</span><span class="o">=</span> <span class="mf">0.65</span>                          <span class="c"># Air gap radius (meter)                       </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_l_s</span><span class="o">=</span> <span class="mf">0.6</span> 													<span class="c"># Core length (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_s</span> <span class="o">=</span> <span class="mf">0.1</span> 													<span class="c"># Stator Slot height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_r</span> <span class="o">=</span> <span class="mf">0.065</span> 												<span class="c"># Rotor Slot height (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_I_0</span> <span class="o">=</span> <span class="mi">32</span> 													<span class="c"># No-load magnetization current (Ampere)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_B_symax</span> <span class="o">=</span> <span class="mf">1.3</span> 											<span class="c"># Peak Stator yoke flux density (Tesla)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_S_Nmax</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3</span>  										<span class="c"># Maximum slip</span>
 
-<span class="c"># NREL 5 MW Drivetrain variables</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">drivetrain_design</span> <span class="o">=</span> <span class="s">&#39;geared&#39;</span> <span class="c"># geared 3-stage Gearbox with induction generator machine</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">machine_rating</span> <span class="o">=</span> <span class="mf">5000.0</span> <span class="c"># kW</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">gear_ratio</span> <span class="o">=</span> <span class="mf">96.76</span> <span class="c"># 97:1 as listed in the 5 MW reference document</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">gear_configuration</span> <span class="o">=</span> <span class="s">&#39;eep&#39;</span> <span class="c"># epicyclic-epicyclic-parallel</span>
-<span class="c">#nace.bevel = 0 # no bevel stage</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">crane</span> <span class="o">=</span> <span class="bp">True</span> <span class="c"># onboard crane present</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">shaft_angle</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="c">#deg</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">shaft_ratio</span> <span class="o">=</span> <span class="mf">0.10</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">ratio_type</span> <span class="o">=</span> <span class="s">&#39;optimal&#39;</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">shaft_type</span> <span class="o">=</span> <span class="s">&#39;normal&#39;</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">uptower_transformer</span><span class="o">=</span><span class="bp">False</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">shrink_disc_mass</span> <span class="o">=</span> <span class="mf">333.3</span><span class="o">*</span><span class="n">nace</span><span class="o">.</span><span class="n">machine_rating</span><span class="o">/</span><span class="mf">1000.0</span> <span class="c"># estimated</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">carrier_mass</span> <span class="o">=</span> <span class="mf">8000.0</span> <span class="c"># estimated</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">mb1Type</span> <span class="o">=</span> <span class="s">&#39;CARB&#39;</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">mb2Type</span> <span class="o">=</span> <span class="s">&#39;SRB&#39;</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">flange_length</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c">#m</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">overhang</span> <span class="o">=</span> <span class="mf">5.0</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">gearbox_cm</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">hss_length</span> <span class="o">=</span> <span class="mf">1.5</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">check_fatigue</span> <span class="o">=</span> <span class="mi">0</span> <span class="c">#0 if no fatigue check, 1 if parameterized fatigue check, 2 if known loads inputs</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">blade_number</span><span class="o">=</span><span class="mi">3</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">cut_in</span><span class="o">=</span><span class="mf">3.</span> <span class="c">#cut-in m/s</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">cut_out</span><span class="o">=</span><span class="mf">25.</span> <span class="c">#cut-out m/s</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">Vrated</span><span class="o">=</span><span class="mf">11.4</span> <span class="c">#rated windspeed m/s</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">weibull_k</span> <span class="o">=</span> <span class="mf">2.2</span> <span class="c"># windepeed distribution shape parameter</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">weibull_A</span> <span class="o">=</span> <span class="mf">9.</span> <span class="c"># windspeed distribution scale parameter</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">T_life</span><span class="o">=</span><span class="mf">20.</span> <span class="c">#design life in years</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">IEC_Class_Letter</span> <span class="o">=</span> <span class="s">&#39;A&#39;</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">L_rb</span> <span class="o">=</span> <span class="mf">1.912</span> <span class="c"># length from hub center to main bearing, leave zero if unknown</span>
+<span class="c"># Specific costs</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>                  				  <span class="c"># Unit cost of Copper $/kg</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fe</span>	<span class="o">=</span> <span class="mf">0.556</span>                    				<span class="c"># Unit cost of Iron $/kg</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fes</span> <span class="o">=</span><span class="mf">0.50139</span>                   				<span class="c"># specific cost of structure</span>
 
-<span class="c"># NREL 5 MW Tower Variables</span>
-<span class="n">nace</span><span class="o">.</span><span class="n">tower_top_diameter</span> <span class="o">=</span> <span class="mf">3.78</span> <span class="c"># m</span>
+<span class="c">#Material properties</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fe</span> <span class="o">=</span> <span class="mi">7700</span>                 					<span class="c">#Steel density</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Copper</span> <span class="o">=</span><span class="mi">8900</span>                  			<span class="c"># Kg/m3 copper density</span>
 
 </pre></div>
 </div>
-<p>We now instantiate the DFIG object which automatically updates the mass, costs, efficiency and performance variables based on the supplied inputs.
-In addition, calculations of mass properties are also made.</p>
 <div class="highlight-python"><div class="highlight"><pre>
-<span class="n">nace</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
 </pre></div>
 </div>
 <p>The resulting system and component properties can then be printed.</p>
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="k">print</span> <span class="s">&quot;Estimate of Nacelle Component Sizes for the NREL 5 MW Reference Turbine&quot;</span>
-<span class="k">print</span> <span class="s">&#39;Low speed shaft: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">lowSpeedShaft</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Main bearings: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">mainBearing</span><span class="o">.</span><span class="n">mass</span> <span class="o">+</span> <span class="n">nace</span><span class="o">.</span><span class="n">secondBearing</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Gearbox: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">gearbox</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;High speed shaft &amp; brakes: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">highSpeedSide</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Generator: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Variable speed electronics: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">above_yaw_massAdder</span><span class="o">.</span><span class="n">vs_electronics_mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Overall mainframe:{0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">above_yaw_massAdder</span><span class="o">.</span><span class="n">mainframe_mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;     Bedplate: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">bedplate</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Electrical connections: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">above_yaw_massAdder</span><span class="o">.</span><span class="n">electrical_mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;HVAC system: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">above_yaw_massAdder</span><span class="o">.</span><span class="n">hvac_mass</span> <span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Nacelle cover: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">above_yaw_massAdder</span><span class="o">.</span><span class="n">cover_mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Yaw system: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">yawSystem</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;Overall nacelle: {0:8.1f} kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">nacelle_mass</span><span class="p">,</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;    cm {0:6.2f} {1:6.2f} {2:6.2f} [m, m, m]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_cm</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;    I {0:6.1f} {1:6.1f} {2:6.1f} [kg*m^2, kg*m^2, kg*m^2]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nace</span><span class="o">.</span><span class="n">nacelle_I</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre>raw_data = {&#39;Parameters&#39;: [&#39;Rating&#39;,&#39;Objective function&#39;,&#39;Air gap diameter&#39;, &quot;Stator length&quot;,&quot;Kra&quot;,&quot;Diameter ratio&quot;, &quot;Pole pitch(tau_p)&quot;, &quot; Number of Stator Slots&quot;,&quot;Stator slot height(h_s)&quot;,&quot;Slots/pole/phase&quot;,&quot;Stator slot width(b_s)&quot;, &quot; Stator slot aspect ratio&quot;,&quot;Stator tooth width(b_t)&quot;, &quot;Stator yoke height(h_ys)&quot;,&quot;Rotor slots&quot;, &quot;Rotor yoke height(h_yr)&quot;, &quot;Rotor slot height(h_r)&quot;, &quot;Rotor slot width(b_r)&quot;,&quot; Rotor Slot aspect ratio&quot;, &quot;Rotor tooth width(b_t)&quot;, &quot;Peak air gap flux density&quot;,&quot;Peak air gap flux density fundamental&quot;,&quot;Peak stator yoke flux density&quot;,&quot;Peak rotor yoke flux density&quot;,&quot;Peak Stator tooth flux density&quot;,&quot;Peak rotor tooth flux density&quot;,&quot;Pole pairs&quot;, &quot;Generator output frequency&quot;, &quot;Generator output phase voltage&quot;, &quot;Generator Output phase current&quot;,&quot;Optimal Slip&quot;,&quot;Stator Turns&quot;,&quot;Conductor cross-section&quot;,&quot;Stator Current density&quot;,&quot;Specific current loading&quot;,&quot;Stator resistance&quot;, &quot;Stator leakage inductance&quot;, &quot;Excited magnetic inductance&quot;,&quot; Rotor winding turns&quot;,&quot;Conductor cross-section&quot;,&quot;Magnetization current&quot;,&quot;I_mag/Is&quot;,&quot; Rotor Current density&quot;,&quot;Rotor resitance&quot;, &quot; Rotor leakage inductance&quot;, &quot;Generator Efficiency&quot;,&quot;Overall drivetrain Efficiency&quot;,&quot;Iron mass&quot;,&quot;Copper mass&quot;,&quot;Structural Steel mass&quot;,&quot;Total Mass&quot;,&quot;Total Material Cost&quot;],
+		&#39;Values&#39;: [opt_problem.DFIG.machine_rating/1e6,opt_problem.Objective_function,2*opt_problem.DFIG.r_s,opt_problem.DFIG.l_s,opt_problem.DFIG.K_rad,opt_problem.DFIG.D_ratio,opt_problem.DFIG.tau_p*1000,opt_problem.DFIG.N_slots,opt_problem.DFIG.h_s*1000,opt_problem.DFIG.q1,opt_problem.DFIG.b_s*1000,opt_problem.DFIG.Slot_aspect_ratio1,opt_problem.DFIG.b_t*1000,opt_problem.DFIG.h_ys*1000,opt_problem.DFIG.Q_r,opt_problem.DFIG.h_yr*1000,opt_problem.DFIG.h_r*1000,opt_problem.DFIG.b_r*1000,opt_problem.DFIG.Slot_aspect_ratio2,opt_problem.DFIG.b_tr*1000,opt_problem.DFIG.B_g,opt_problem.DFIG.B_g1,opt_problem.DFIG.B_symax,opt_problem.DFIG.B_rymax,opt_problem.DFIG.B_tsmax,opt_problem.DFIG.B_trmax,opt_problem.DFIG.p,opt_problem.DFIG.f,opt_problem.DFIG.E_p,opt_problem.DFIG.I_s,opt_problem.DFIG.S_Nmax,opt_problem.DFIG.N_s,opt_problem.DFIG.A_Cuscalc,opt_problem.DFIG.J_s,opt_problem.DFIG.A_1/1000,opt_problem.DFIG.R_s,opt_problem.DFIG.L_s,opt_problem.DFIG.L_sm,opt_problem.DFIG.N_r,opt_problem.DFIG.A_Curcalc,opt_problem.DFIG.I_0,opt_problem.DFIG.Current_ratio,opt_problem.DFIG.J_r,opt_problem.DFIG.R_R,opt_problem.DFIG.L_r,opt_problem.DFIG.gen_eff,opt_problem.DFIG.Overall_eff,opt_problem.DFIG.Iron/1000,opt_problem.DFIG.Cu/1000,opt_problem.DFIG.Structure/1000,opt_problem.DFIG.Mass/1000,opt_problem.DFIG.Costs/1000],
+			&#39;Limit&#39;: [&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(0.2-1.5)&#39;,&#39;(1.37-1.4)&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(4-10)&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(4-10)&#39;,&#39;&#39;,&#39;(0.7-1.2)&#39;,&#39;&#39;,&#39;2&#39;,&#39;2.1&#39;,&#39;2.1&#39;,&#39;2.1&#39;,&#39;&#39;,&#39;&#39;,&#39;(500-5000)&#39;,&#39;&#39;,&#39;(-0.002-0.3)&#39;,&#39;&#39;,&#39;&#39;,&#39;(3-6)&#39;,&#39;&lt;60&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(0.1-0.3)&#39;,&#39;(3-6)&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,opt_problem.Eta_target,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;],
+				&#39;Units&#39;:[&#39;MW&#39;,&#39;&#39;,&#39;m&#39;,&#39;m&#39;,&#39;-&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;-&#39;,&#39;Hz&#39;,&#39;V&#39;,&#39;A&#39;,&#39;&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;A/mm^2&#39;,&#39;kA/m&#39;,&#39;ohms&#39;,&#39;p.u&#39;,&#39;p.u&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;A&#39;,&#39;&#39;,&#39;A/mm^2&#39;,&#39;ohms&#39;,&#39;p.u&#39;,&#39;%&#39;,&#39;%&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;$1000&#39;]}
+	df=pandas.DataFrame(raw_data, columns=[&#39;Parameters&#39;,&#39;Values&#39;,&#39;Limit&#39;,&#39;Units&#39;])
+	print(df)
+
 </pre></div>
 </div>
-<p>The results should appear as below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Estimate</span> <span class="n">of</span> <span class="n">Nacelle</span> <span class="n">Component</span> <span class="n">Sizes</span> <span class="k">for</span> <span class="n">the</span> <span class="n">NREL</span> <span class="mi">5</span> <span class="n">MW</span> <span class="n">Reference</span> <span class="n">Turbine</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Low</span> <span class="n">speed</span> <span class="n">shaft</span><span class="p">:</span>  <span class="mf">18564.9</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Main</span> <span class="n">bearings</span><span class="p">:</span>   <span class="mf">5845.4</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Gearbox</span><span class="p">:</span>  <span class="mf">55658.3</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">High</span> <span class="n">speed</span> <span class="n">shaft</span> <span class="o">&amp;</span> <span class="n">brakes</span><span class="p">:</span>   <span class="mf">2414.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Generator</span><span class="p">:</span>  <span class="mf">16699.9</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Variable</span> <span class="n">speed</span> <span class="n">electronics</span><span class="p">:</span>      <span class="mf">0.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Overall</span> <span class="n">mainframe</span><span class="p">:</span> <span class="mf">60785.2</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span>     <span class="n">Bedplate</span><span class="p">:</span>  <span class="mf">51364.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Electrical</span> <span class="n">connections</span><span class="p">:</span>      <span class="mf">0.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">HVAC</span> <span class="n">system</span><span class="p">:</span>    <span class="mf">400.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Nacelle</span> <span class="n">cover</span><span class="p">:</span>   <span class="mf">4577.4</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Yaw</span> <span class="n">system</span><span class="p">:</span>   <span class="mf">6044.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Overall</span> <span class="n">nacelle</span><span class="p">:</span> <span class="mf">170990.5</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">cm</span>  <span class="o">-</span><span class="mf">0.44</span>   <span class="mf">0.00</span>   <span class="mf">0.26</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">I</span> <span class="mf">77320965.7</span> <span class="mf">1033725.7</span> <span class="mf">935773.7</span> <span class="p">[</span><span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">]</span>
+<p>The optimized design dimensions together with the performance parameters are printed on screen and available in an output file in a Microsoft Excel format(file name [DFIG_5.0MW.xlsx]).
+The results should appear as below listing the parameters together with their limits where applicable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>                              <span class="n">Parameters</span>       <span class="n">Values</span>         <span class="n">Limit</span>   <span class="n">Units</span>
+<span class="go">&gt;&gt;&gt;0                                  Rating            5                    MW</span>
+<span class="go">&gt;&gt;&gt;1                      Objective function        Costs</span>
+<span class="go">&gt;&gt;&gt;2                        Air gap diameter     0.893608                     m</span>
+<span class="go">&gt;&gt;&gt;3                           Stator length      1.15888                     m</span>
+<span class="go">&gt;&gt;&gt;4                                     Kra      1.29685     (0.2-1.5)       -</span>
+<span class="go">&gt;&gt;&gt;5                          Diameter ratio      1.37928    (1.37-1.4)       -</span>
+<span class="go">&gt;&gt;&gt;6                       Pole pitch(tau_p)      467.892                    mm</span>
+<span class="go">&gt;&gt;&gt;7                  Number of Stator Slots           90                     -</span>
+<span class="go">&gt;&gt;&gt;8                 Stator slot height(h_s)          100                    mm</span>
+<span class="go">&gt;&gt;&gt;9                        Slots/pole/phase            5</span>
+<span class="go">&gt;&gt;&gt;10                 Stator slot width(b_s)      14.0368                    mm</span>
+<span class="go">&gt;&gt;&gt;11               Stator slot aspect ratio      7.12415        (4-10)</span>
+<span class="go">&gt;&gt;&gt;12                Stator tooth width(b_t)       17.156                    mm</span>
+<span class="go">&gt;&gt;&gt;13               Stator yoke height(h_ys)      64.4629                    mm</span>
+<span class="go">&gt;&gt;&gt;14                            Rotor slots           72                     -</span>
+<span class="go">&gt;&gt;&gt;15                Rotor yoke height(h_yr)      64.4629                    mm</span>
+<span class="go">&gt;&gt;&gt;16                 Rotor slot height(h_r)      83.0378                    mm</span>
+<span class="go">&gt;&gt;&gt;17                  Rotor slot width(b_r)      17.4614                    mm</span>
+<span class="go">&gt;&gt;&gt;18                Rotor Slot aspect ratio      4.75549        (4-10)       -</span>
+<span class="go">&gt;&gt;&gt;19                 Rotor tooth width(b_t)      21.3418                    mm</span>
+<span class="go">&gt;&gt;&gt;20              Peak air gap flux density     0.700955     (0.7-1.2)       T</span>
+<span class="go">&gt;&gt;&gt;21  Peak air gap flux density fundamental     0.655258                     T</span>
+<span class="go">&gt;&gt;&gt;22          Peak stator yoke flux density      1.61948             2       T</span>
+<span class="go">&gt;&gt;&gt;23           Peak rotor yoke flux density      1.61948           2.1       T</span>
+<span class="go">&gt;&gt;&gt;24         Peak Stator tooth flux density      1.27446           2.1       T</span>
+<span class="go">&gt;&gt;&gt;25          Peak rotor tooth flux density      1.56712           2.1       T</span>
+<span class="go">&gt;&gt;&gt;26                             Pole pairs            3                     -</span>
+<span class="go">&gt;&gt;&gt;27             Generator output frequency           60                    Hz</span>
+<span class="go">&gt;&gt;&gt;28         Generator output phase voltage      2327.55    (500-5000)       V</span>
+<span class="go">&gt;&gt;&gt;29         Generator Output phase current      578.929                     A</span>
+<span class="go">&gt;&gt;&gt;30                           Optimal Slip         -0.3  (-0.002-0.3)</span>
+<span class="go">&gt;&gt;&gt;31                           Stator Turns           30                 turns</span>
+<span class="go">&gt;&gt;&gt;32                Conductor cross-section      266.698                  mm^2</span>
+<span class="go">&gt;&gt;&gt;33                 Stator Current density      2.17073         (3-6)  A/mm^2</span>
+<span class="go">&gt;&gt;&gt;34               Specific current loading      37.1194           &lt;60    kA/m</span>
+<span class="go">&gt;&gt;&gt;35                      Stator resistance            0                  ohms</span>
+<span class="go">&gt;&gt;&gt;36              Stator leakage inductance  0.000268092                   p.u</span>
+<span class="go">&gt;&gt;&gt;37            Excited magnetic inductance    0.0343756                   p.u</span>
+<span class="go">&gt;&gt;&gt;38                    Rotor winding turns           98                 turns</span>
+<span class="go">&gt;&gt;&gt;39                Conductor cross-section      91.7704                  mm^2</span>
+<span class="go">&gt;&gt;&gt;40                  Magnetization current      38.2396                     A</span>
+<span class="go">&gt;&gt;&gt;41                               I_mag/Is     0.178009     (0.1-0.3)</span>
+<span class="go">&gt;&gt;&gt;42                  Rotor Current density      6.00211         (3-6)  A/mm^2</span>
+<span class="go">&gt;&gt;&gt;43                        Rotor resitance   0.00705202                  ohms</span>
+<span class="go">&gt;&gt;&gt;44               Rotor leakage inductance  0.000701202                   p.u</span>
+<span class="go">&gt;&gt;&gt;45                   Generator Efficiency       98.511                     %</span>
+<span class="go">&gt;&gt;&gt;46          Overall drivetrain Efficiency       94.078            93       %</span>
+<span class="go">&gt;&gt;&gt;47                              Iron mass      5.65377                  Tons</span>
+<span class="go">&gt;&gt;&gt;48                            Copper mass     0.900368                  Tons</span>
+<span class="go">&gt;&gt;&gt;49                  Structural Steel mass      13.4686                  Tons</span>
+<span class="go">&gt;&gt;&gt;50                             Total Mass      20.0227                  Tons</span>
+<span class="go">&gt;&gt;&gt;51                    Total Material Cost      14.2057                 $1000</span>
 </pre></div>
 </div>
+<p>These result file can be read into the the MATALB script [Par_GeneratorSE_FEMM_DFIG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
 </div>
 
 
