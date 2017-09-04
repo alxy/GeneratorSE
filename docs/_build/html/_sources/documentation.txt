@@ -15,49 +15,63 @@ Sizing models for the different generator modules are described along with mass,
 Documentation for GeneratorSE
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following inputs and outputs are defined for GeneratorSE :
+The following inputs and outputs are defined for GeneratorSE.PMSG_arms :
 
-.. literalinclude:: ../src/generatorse/drive.py
+.. literalinclude:: ../src/generatorse/PMSG_arms.py
     :language: python
-    :start-after: Drive3pt(Assembly)
+    :start-after: Drive_PMSG_arms(Assembly)
     :end-before: def configure(self)
-    :prepend: class Drive3pt(Assembly):
+    :prepend: class PMSG(Component):
 
-.. module:: drivese.drive
-.. class:: Drive3pt
+.. module:: generatorse.PMSG_arms
+.. class:: generatorse.PMSG_arms.Drive_PMSG_arms
 
-The following inputs and outputs are defined for GeneratorSE using the four-point suspension configuration:
+The following inputs and outputs are defined for PMSG_disc :
 
-.. literalinclude:: ../src/generatorse/drive.py
+.. literalinclude:: ../src/generatorse/PMSG_disc.py
     :language: python
-    :start-after: Drive4pt(Assembly)
+    :start-after: Drive_PMSG_disc(Assembly)
     :end-before: def configure(self)
-    :prepend: class Drive4pt(Assembly):
+    :prepend: class PMSG(Component):
 
-.. module:: drivese.drive
-.. class:: Drive4pt
+.. module:: generatorse.PMSG_disc
+.. class:: generatorse.PMSG_disc.Drive_PMSG_disc
 
-Implemented Base Model
-=========================
-.. module:: drivewpact.drive
-.. class:: NacelleBase
+The following inputs and outputs are defined for EESG :
 
-Referenced Sub-System Modules 
-==============================
-.. module:: drivese.drivese_components
-.. class:: LowSpeedShaft_drive
-.. class:: LowSpeedShaft_drive4pt
-.. class:: LowSpeedShaft_drive3pt
-.. class:: MainBearing_drive
-.. class:: SecondBearing_drive
-.. class:: Gearbox_drive
-.. class:: HighSpeedSide_drive
-.. class:: Generator_drive
-.. class:: Bedplate_drive
-.. class:: AboveYawMassAdder_drive
-.. class:: YawSystem_drive
-.. class:: NacelleSystemAdder_drive
+.. literalinclude:: ../src/generatorse/EESG.py
+    :language: python
+    :start-after: Drive_EESG(Assembly)
+    :end-before: def configure(self)
+    :prepend: class EESG(Component):
 
+.. module:: generatorse.EESG
+.. class:: generatorse.EESG.Drive_EESG
+
+
+The following inputs and outputs are defined for DFIG :
+
+.. literalinclude:: ../src/generatorse/DFIG.py
+    :language: python
+    :start-after: Drive_DFIG(Assembly)
+    :end-before: def configure(self)
+    :prepend: class DFIG(Component):
+
+.. module:: generatorse.DFIG
+.. class:: generatorse.DFIG.Drive_DFIG
+
+
+
+The following inputs and outputs are defined for SCIG :
+
+.. literalinclude:: ../src/generatorse/SCIG.py
+    :language: python
+    :start-after: Drive_SCIG(Assembly)
+    :end-before: def configure(self)
+    :prepend: class SCIG(Component):
+
+.. module:: generatorse.SCIG
+.. class:: generatorse.SCIG.Drive_SCIG
 
 
 
