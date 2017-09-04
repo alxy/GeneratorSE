@@ -52,7 +52,7 @@
             
   <div class="section" id="tutorial">
 <span id="tutorial-label"></span><h1>3. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>As an example, let us size a direct-drive Permanent Magnet synchronous Generator (PMSG) for the NREL 5MW Reference Model [FAST2009].</p>
+<p>As a frst example, we will size a direct-drive Permanent Magnet synchronous Generator (PMSG) for the NREL 5MW Reference Model [FAST2009].</p>
 <p>The first step is to import the relevant files.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">generatorse.PMSG_arms</span>
 <span class="kn">import</span> <span class="nn">generatorse.DFIG</span>
@@ -123,7 +123,7 @@ print df
 
 </pre></div>
 </div>
-<p>The results should appear as below:</p>
+<p>The results should appear as below listing the parameters together with their limits where applicable:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>                              <span class="n">Parameters</span>       <span class="n">Values</span>       <span class="n">Limit</span>      <span class="n">Units</span>
 <span class="go">&gt;&gt;&gt;0                                  Rating     5.000000                     MW</span>
 <span class="go">&gt;&gt;&gt;1                             Stator Arms     5.000000                   unit</span>
@@ -181,11 +181,13 @@ print df
 <span class="go">&gt;&gt;&gt;53                    Total Material Cost   282.820957                     k$</span>
 </pre></div>
 </div>
-<p>Secondly, we will design a gear driven Doubly fed Induction generator.  The DFIG design
+<p>These result file can be read into the the MATALB script [Par_GeneratorSE_FEMM_PMSG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
+<p>As a second example, we will design a gear driven Doubly fed Induction generator(DFIG).  The DFIG design
 relies on inputs such as machine rating, target overall drivetrain efficiency, gearbox efficiency,
 high speed shaft speed( or gear ratio).It also requires specification of shear stress, material properties( densities), specific material costs.
 The main design variables are initialized with an objective and driver. The designs are computed analytically and checked against predefined constraints
-to meet objective functions.The optimized design dimensions are printed on screen and available in an output file in a Microsoft Excel format.</p>
+to meet objective functions.In addition, calculations of mass properties are also made.
+We now instantiate the DFIG object which automatically updates the mass, costs, efficiency and performance variables based on the supplied inputs.</p>
 <div class="highlight-python"><div class="highlight"><pre>
 <span class="c"># # Initial design values for a DFIG designed for a 5MW turbine</span>
 
@@ -213,8 +215,6 @@ to meet objective functions.The optimized design dimensions are printed on scree
 
 </pre></div>
 </div>
-<p>We now instantiate the DFIG object which automatically updates the mass, costs, efficiency and performance variables based on the supplied inputs.
-In addition, calculations of mass properties are also made.</p>
 <div class="highlight-python"><div class="highlight"><pre>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
@@ -230,25 +230,64 @@ In addition, calculations of mass properties are also made.</p>
 
 </pre></div>
 </div>
-<p>The results should appear as below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Estimate</span> <span class="n">of</span> <span class="n">Nacelle</span> <span class="n">Component</span> <span class="n">Sizes</span> <span class="k">for</span> <span class="n">the</span> <span class="n">NREL</span> <span class="mi">5</span> <span class="n">MW</span> <span class="n">Reference</span> <span class="n">Turbine</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Low</span> <span class="n">speed</span> <span class="n">shaft</span><span class="p">:</span>  <span class="mf">18564.9</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Main</span> <span class="n">bearings</span><span class="p">:</span>   <span class="mf">5845.4</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Gearbox</span><span class="p">:</span>  <span class="mf">55658.3</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">High</span> <span class="n">speed</span> <span class="n">shaft</span> <span class="o">&amp;</span> <span class="n">brakes</span><span class="p">:</span>   <span class="mf">2414.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Generator</span><span class="p">:</span>  <span class="mf">16699.9</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Variable</span> <span class="n">speed</span> <span class="n">electronics</span><span class="p">:</span>      <span class="mf">0.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Overall</span> <span class="n">mainframe</span><span class="p">:</span> <span class="mf">60785.2</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span>     <span class="n">Bedplate</span><span class="p">:</span>  <span class="mf">51364.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Electrical</span> <span class="n">connections</span><span class="p">:</span>      <span class="mf">0.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">HVAC</span> <span class="n">system</span><span class="p">:</span>    <span class="mf">400.0</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Nacelle</span> <span class="n">cover</span><span class="p">:</span>   <span class="mf">4577.4</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Yaw</span> <span class="n">system</span><span class="p">:</span>   <span class="mf">6044.7</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Overall</span> <span class="n">nacelle</span><span class="p">:</span> <span class="mf">170990.5</span> <span class="n">kg</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">cm</span>  <span class="o">-</span><span class="mf">0.44</span>   <span class="mf">0.00</span>   <span class="mf">0.26</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">I</span> <span class="mf">77320965.7</span> <span class="mf">1033725.7</span> <span class="mf">935773.7</span> <span class="p">[</span><span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">kg</span><span class="o">*</span><span class="n">m</span><span class="o">^</span><span class="mi">2</span><span class="p">]</span>
+<p>The optimized design dimensions together with the performance parameters are printed on screen and available in an output file in a Microsoft Excel format(file name [DFIG_5.0MW.xlsx]).
+The results should appear as below listing the parameters together with their limits where applicable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span>                              <span class="n">Parameters</span>       <span class="n">Values</span>         <span class="n">Limit</span>   <span class="n">Units</span>
+<span class="go">&gt;&gt;&gt;0                                  Rating            5                    MW</span>
+<span class="go">&gt;&gt;&gt;1                      Objective function        Costs</span>
+<span class="go">&gt;&gt;&gt;2                        Air gap diameter     0.893608                     m</span>
+<span class="go">&gt;&gt;&gt;3                           Stator length      1.15888                     m</span>
+<span class="go">&gt;&gt;&gt;4                                     Kra      1.29685     (0.2-1.5)       -</span>
+<span class="go">&gt;&gt;&gt;5                          Diameter ratio      1.37928    (1.37-1.4)       -</span>
+<span class="go">&gt;&gt;&gt;6                       Pole pitch(tau_p)      467.892                    mm</span>
+<span class="go">&gt;&gt;&gt;7                  Number of Stator Slots           90                     -</span>
+<span class="go">&gt;&gt;&gt;8                 Stator slot height(h_s)          100                    mm</span>
+<span class="go">&gt;&gt;&gt;9                        Slots/pole/phase            5</span>
+<span class="go">&gt;&gt;&gt;10                 Stator slot width(b_s)      14.0368                    mm</span>
+<span class="go">&gt;&gt;&gt;11               Stator slot aspect ratio      7.12415        (4-10)</span>
+<span class="go">&gt;&gt;&gt;12                Stator tooth width(b_t)       17.156                    mm</span>
+<span class="go">&gt;&gt;&gt;13               Stator yoke height(h_ys)      64.4629                    mm</span>
+<span class="go">&gt;&gt;&gt;14                            Rotor slots           72                     -</span>
+<span class="go">&gt;&gt;&gt;15                Rotor yoke height(h_yr)      64.4629                    mm</span>
+<span class="go">&gt;&gt;&gt;16                 Rotor slot height(h_r)      83.0378                    mm</span>
+<span class="go">&gt;&gt;&gt;17                  Rotor slot width(b_r)      17.4614                    mm</span>
+<span class="go">&gt;&gt;&gt;18                Rotor Slot aspect ratio      4.75549        (4-10)       -</span>
+<span class="go">&gt;&gt;&gt;19                 Rotor tooth width(b_t)      21.3418                    mm</span>
+<span class="go">&gt;&gt;&gt;20              Peak air gap flux density     0.700955     (0.7-1.2)       T</span>
+<span class="go">&gt;&gt;&gt;21  Peak air gap flux density fundamental     0.655258                     T</span>
+<span class="go">&gt;&gt;&gt;22          Peak stator yoke flux density      1.61948             2       T</span>
+<span class="go">&gt;&gt;&gt;23           Peak rotor yoke flux density      1.61948           2.1       T</span>
+<span class="go">&gt;&gt;&gt;24         Peak Stator tooth flux density      1.27446           2.1       T</span>
+<span class="go">&gt;&gt;&gt;25          Peak rotor tooth flux density      1.56712           2.1       T</span>
+<span class="go">&gt;&gt;&gt;26                             Pole pairs            3                     -</span>
+<span class="go">&gt;&gt;&gt;27             Generator output frequency           60                    Hz</span>
+<span class="go">&gt;&gt;&gt;28         Generator output phase voltage      2327.55    (500-5000)       V</span>
+<span class="go">&gt;&gt;&gt;29         Generator Output phase current      578.929                     A</span>
+<span class="go">&gt;&gt;&gt;30                           Optimal Slip         -0.3  (-0.002-0.3)</span>
+<span class="go">&gt;&gt;&gt;31                           Stator Turns           30                 turns</span>
+<span class="go">&gt;&gt;&gt;32                Conductor cross-section      266.698                  mm^2</span>
+<span class="go">&gt;&gt;&gt;33                 Stator Current density      2.17073         (3-6)  A/mm^2</span>
+<span class="go">&gt;&gt;&gt;34               Specific current loading      37.1194           &lt;60    kA/m</span>
+<span class="go">&gt;&gt;&gt;35                      Stator resistance            0                  ohms</span>
+<span class="go">&gt;&gt;&gt;36              Stator leakage inductance  0.000268092                   p.u</span>
+<span class="go">&gt;&gt;&gt;37            Excited magnetic inductance    0.0343756                   p.u</span>
+<span class="go">&gt;&gt;&gt;38                    Rotor winding turns           98                 turns</span>
+<span class="go">&gt;&gt;&gt;39                Conductor cross-section      91.7704                  mm^2</span>
+<span class="go">&gt;&gt;&gt;40                  Magnetization current      38.2396                     A</span>
+<span class="go">&gt;&gt;&gt;41                               I_mag/Is     0.178009     (0.1-0.3)</span>
+<span class="go">&gt;&gt;&gt;42                  Rotor Current density      6.00211         (3-6)  A/mm^2</span>
+<span class="go">&gt;&gt;&gt;43                        Rotor resitance   0.00705202                  ohms</span>
+<span class="go">&gt;&gt;&gt;44               Rotor leakage inductance  0.000701202                   p.u</span>
+<span class="go">&gt;&gt;&gt;45                   Generator Efficiency       98.511                     %</span>
+<span class="go">&gt;&gt;&gt;46          Overall drivetrain Efficiency       94.078            93       %</span>
+<span class="go">&gt;&gt;&gt;47                              Iron mass      5.65377                  Tons</span>
+<span class="go">&gt;&gt;&gt;48                            Copper mass     0.900368                  Tons</span>
+<span class="go">&gt;&gt;&gt;49                  Structural Steel mass      13.4686                  Tons</span>
+<span class="go">&gt;&gt;&gt;50                             Total Mass      20.0227                  Tons</span>
+<span class="go">&gt;&gt;&gt;51                    Total Material Cost      14.2057                 $1000</span>
 </pre></div>
 </div>
+<p>These result file can be read into the the MATALB script [Par_GeneratorSE_FEMM_DFIG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
 </div>
 
 
