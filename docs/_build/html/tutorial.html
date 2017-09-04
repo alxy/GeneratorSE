@@ -70,13 +70,11 @@ is determined in accordance with the required voltage at no-load.</p>
 <span class="c">## Initial design variables for a DD PMSG designed for a 5MW turbine</span>
 
 <span class="n">opt_problem</span> <span class="o">=</span> <span class="n">Drive_PMSG_arms</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;Costs&#39;</span><span class="p">)</span> <span class="c"># Optimiser and Objective function</span>
-	
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">P_rated</span><span class="o">=</span><span class="mf">5.0e6</span>             								<span class="c"># Rated power  </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">P_rated</span><span class="o">=</span><span class="mf">5.0e6</span>															<span class="c"># Rated power</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">T_rated</span><span class="o">=</span><span class="mf">4.143289e6</span>												<span class="c"># Rated torque (Nm)</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">N</span><span class="o">=</span><span class="mf">12.1</span>                    								<span class="c"># Rated speed (rpm)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">N</span><span class="o">=</span><span class="mf">12.1</span>																		<span class="c"># Rated speed (rpm)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span> <span class="o">=</span> <span class="mi">93</span>														<span class="c"># Target design efficiency %</span>
-
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_r_s</span><span class="o">=</span> <span class="mf">3.26</span>														<span class="c"># Air gap radius (meter)               </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_r_s</span><span class="o">=</span> <span class="mf">3.26</span>														<span class="c"># Air gap radius (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_l_s</span><span class="o">=</span> <span class="mf">1.6</span>															<span class="c"># core length (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_h_s</span> <span class="o">=</span> <span class="mf">0.07</span>														<span class="c"># Stator slot height (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_tau_p</span> <span class="o">=</span> <span class="mf">0.08</span>													<span class="c"># Pole pitch (meter)</span>
@@ -91,9 +89,9 @@ is determined in accordance with the required voltage at no-load.</p>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_d_s</span><span class="o">=</span> <span class="mf">0.3</span>															<span class="c"># Stator axial arm dimension (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_t_wr</span> <span class="o">=</span><span class="mf">0.06</span>														<span class="c"># Rotor arm thickness (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_t_ws</span> <span class="o">=</span><span class="mf">0.06</span>														<span class="c"># Stator arm thickness (meter)</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_R_o</span> <span class="o">=</span><span class="mf">0.43</span>      											<span class="c"># Main shaft radius (meter)</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">PMSG_R_o</span> <span class="o">=</span><span class="mf">0.43</span>														<span class="c"># Main shaft radius (meter)</span>
 
-<span class="c"># Specific costs</span>
+<span class="c">#Specific costs</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>                  						<span class="c"># Unit cost of Copper $/kg</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fe</span>	<span class="o">=</span> <span class="mf">0.556</span>                    					<span class="c"># Unit cost of Iron/magnetic steel $/kg</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fes</span> <span class="o">=</span><span class="mf">0.50139</span>                   					<span class="c"># specific cost of structural steel</span>
@@ -181,7 +179,7 @@ print df
 <span class="go">&gt;&gt;&gt;53                    Total Material Cost   282.820957                     k$</span>
 </pre></div>
 </div>
-<p>These result file can be read into the the MATALB script [Par_GeneratorSE_FEMM_PMSG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
+<p>These structural design dimensions can be used to create CAD models and the resulting design can be validated by structural analysis. The electromagnetic design dimensions from the excel file can be read into the the MATALB script [Par_GeneratorSE_FEMM_PMSG.m] to populate the 2D finite element mesh model in FEMM and perform a magnetostatic analysis.</p>
 <p>As a second example, we will design a gear driven Doubly fed Induction generator(DFIG).  The DFIG design
 relies on inputs such as machine rating, target overall drivetrain efficiency, gearbox efficiency,
 high speed shaft speed( or gear ratio).It also requires specification of shear stress, material properties( densities), specific material costs.
@@ -192,11 +190,11 @@ We now instantiate the DFIG object which automatically updates the mass, costs, 
 <span class="c"># # Initial design values for a DFIG designed for a 5MW turbine</span>
 
 <span class="n">opt_problem</span> <span class="o">=</span> <span class="n">Drive_DFIG</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;Costs&#39;</span><span class="p">)</span>    <span class="c"># Optimiser and Objective function</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span><span class="o">=</span><span class="mi">93</span>														<span class="c"># Target overall drivetrain efficiency             </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span><span class="o">=</span><span class="mi">93</span>														<span class="c"># Target overall drivetrain efficiency</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_P_rated</span><span class="o">=</span><span class="mf">5e6</span>												<span class="c"># Rated power</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_N_rated</span><span class="o">=</span><span class="mi">1200</span>												<span class="c"># Rated speed</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">Gearbox_efficiency</span><span class="o">=</span><span class="mf">0.955</span>								<span class="c"># Gearbox efficiency</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_r_s</span><span class="o">=</span> <span class="mf">0.65</span>                          <span class="c"># Air gap radius (meter)                       </span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_r_s</span><span class="o">=</span> <span class="mf">0.65</span>                          <span class="c"># Air gap radius (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_l_s</span><span class="o">=</span> <span class="mf">0.6</span> 													<span class="c"># Core length (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_s</span> <span class="o">=</span> <span class="mf">0.1</span> 													<span class="c"># Stator Slot height (meter)</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_h_r</span> <span class="o">=</span> <span class="mf">0.065</span> 												<span class="c"># Rotor Slot height (meter)</span>
@@ -205,7 +203,7 @@ We now instantiate the DFIG object which automatically updates the mass, costs, 
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">DFIG_S_Nmax</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3</span>  										<span class="c"># Maximum slip</span>
 
 <span class="c"># Specific costs</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>                  				  <span class="c"># Unit cost of Copper $/kg</span>
+<span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Cu</span>   <span class="o">=</span><span class="mf">4.786</span>														<span class="c"># Unit cost of Copper $/kg</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fe</span>	<span class="o">=</span> <span class="mf">0.556</span>                    				<span class="c"># Unit cost of Iron $/kg</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">C_Fes</span> <span class="o">=</span><span class="mf">0.50139</span>                   				<span class="c"># specific cost of structure</span>
 
