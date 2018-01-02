@@ -56,11 +56,6 @@
 <p>The first step is to import the relevant files.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">generatorse.PMSG_arms</span>
 <span class="kn">import</span> <span class="nn">generatorse.DFIG</span>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 </pre></div>
 </div>
 <p>We will start with the radial flux PMSG with spoke arm arrangement.  The PMSG module relies on inputs from the rotor such as rated speed,
@@ -69,12 +64,7 @@ and initialization of electromagnetic and structural design variables necessary 
 objective(Costs,Mass, Efficiency or Aspect ratio) and driver determines the final design. The designs are generated in compliance with the user-specified constraints on generator
 terminal voltage and constraints imposed on the dimensions and electrical,magnetic and structural deformations. The excitation requirement (e.g., magnet dimensions,pole pairs)
 is determined in accordance with the required voltage at no-load.</p>
-<<<<<<< HEAD
 <div class="highlight-python"><div class="highlight"><pre><span class="c">## Initial design variables for a DD PMSG designed for a 5MW turbine</span>
-=======
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="c">## Initial design variables for a DD PMSG designed for a 5MW turbine</span>
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 
 <span class="n">opt_problem</span> <span class="o">=</span> <span class="n">PMSG_arms_Opt</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;PMSG_Cost.Costs&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c"># Optimiser and Objective function</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">P_rated</span><span class="o">=</span><span class="mf">5.0e6</span>															<span class="c"># Rated power</span>
@@ -108,7 +98,6 @@ is determined in accordance with the required voltage at no-load.</p>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Copper</span> <span class="o">=</span><span class="mi">8900</span>              						<span class="c"># Kg/m3 copper density</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_PM</span> <span class="o">=</span><span class="mi">7450</span>                  						<span class="c"># Kg/m3 magnet density</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fes</span> <span class="o">=</span><span class="mi">7850</span>                  						<span class="c"># Kg/m3 structural steel density</span>
-<<<<<<< HEAD
 </pre></div>
 </div>
 <p>We now run the PMSG_arms module.</p>
@@ -117,29 +106,11 @@ is determined in accordance with the required voltage at no-load.</p>
 </div>
 <p>The resulting system and component properties can then be printed.</p>
 <div class="highlight-python"><div class="highlight"><pre>raw_data = {&#39;Parameters&#39;: [&#39;Rating&#39;,&#39;Stator Arms&#39;, &#39;Stator Axial arm dimension&#39;,&#39;Stator Circumferential arm dimension&#39;,&#39; Stator arm Thickness&#39; ,&#39;Rotor arms&#39;,&#39;Rotor Axial arm dimension&#39;,&#39;Rotor Circumferential arm dimension&#39; ,&#39;Rotor arm Thickness&#39;,&#39; Stator Radial deflection&#39;, &#39;Stator Axial deflection&#39;,&#39;Stator circum deflection&#39;,&#39; Rotor Radial deflection&#39;, &#39;Rotor Axial deflection&#39;,&#39;Rotor circum deflection&#39;, &#39;Air gap diameter&#39;,&#39;Overall Outer diameter&#39;, &#39;Stator length&#39;, &#39;l/d ratio&#39;,&#39;Slot_aspect_ratio&#39;,&#39;Pole pitch&#39;, &#39;Stator slot height&#39;,&#39;Stator slotwidth&#39;,&#39;Stator tooth width&#39;, &#39;Stator yoke height&#39;, &#39;Rotor yoke height&#39;, &#39;Magnet height&#39;, &#39;Magnet width&#39;, &#39;Peak air gap flux density fundamental&#39;,&#39;Peak stator yoke flux density&#39;,&#39;Peak rotor yoke flux density&#39;,&#39;Flux density above magnet&#39;,&#39;Maximum Stator flux density&#39;,&#39;Maximum tooth flux density&#39;,&#39;Pole pairs&#39;, &#39;Generator output frequency&#39;, &#39;Generator output phase voltage&#39;, &#39;Generator Output phase current&#39;, &#39;Stator resistance&#39;,&#39;Synchronous inductance&#39;, &#39;Stator slots&#39;,&#39;Stator turns&#39;,&#39;Conductor cross-section&#39;,&#39;Stator Current density &#39;,&#39;Specific current loading&#39;,&#39;Generator Efficiency &#39;,&#39;Iron mass&#39;,&#39;Magnet mass&#39;,&#39;Copper mass&#39;,&#39;Mass of Arms&#39;, &#39;Total Mass&#39;,&#39;Total Material Cost&#39;],
-=======
-
-</pre></div>
-</div>
-<p>We now run the PMSG_arms module.</p>
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-</pre></div>
-</div>
-<p>The resulting system and component properties can then be printed.</p>
-<div class="highlight-python"><div class="highlight"><pre>
-raw_data = {&#39;Parameters&#39;: [&#39;Rating&#39;,&#39;Stator Arms&#39;, &#39;Stator Axial arm dimension&#39;,&#39;Stator Circumferential arm dimension&#39;,&#39; Stator arm Thickness&#39; ,&#39;Rotor arms&#39;,&#39;Rotor Axial arm dimension&#39;,&#39;Rotor Circumferential arm dimension&#39; ,&#39;Rotor arm Thickness&#39;,&#39; Stator Radial deflection&#39;, &#39;Stator Axial deflection&#39;,&#39;Stator circum deflection&#39;,&#39; Rotor Radial deflection&#39;, &#39;Rotor Axial deflection&#39;,&#39;Rotor circum deflection&#39;, &#39;Air gap diameter&#39;,&#39;Overall Outer diameter&#39;, &#39;Stator length&#39;, &#39;l/d ratio&#39;,&#39;Slot_aspect_ratio&#39;,&#39;Pole pitch&#39;, &#39;Stator slot height&#39;,&#39;Stator slotwidth&#39;,&#39;Stator tooth width&#39;, &#39;Stator yoke height&#39;, &#39;Rotor yoke height&#39;, &#39;Magnet height&#39;, &#39;Magnet width&#39;, &#39;Peak air gap flux density fundamental&#39;,&#39;Peak stator yoke flux density&#39;,&#39;Peak rotor yoke flux density&#39;,&#39;Flux density above magnet&#39;,&#39;Maximum Stator flux density&#39;,&#39;Maximum tooth flux density&#39;,&#39;Pole pairs&#39;, &#39;Generator output frequency&#39;, &#39;Generator output phase voltage&#39;, &#39;Generator Output phase current&#39;, &#39;Stator resistance&#39;,&#39;Synchronous inductance&#39;, &#39;Stator slots&#39;,&#39;Stator turns&#39;,&#39;Conductor cross-section&#39;,&#39;Stator Current density &#39;,&#39;Specific current loading&#39;,&#39;Generator Efficiency &#39;,&#39;Iron mass&#39;,&#39;Magnet mass&#39;,&#39;Copper mass&#39;,&#39;Mass of Arms&#39;, &#39;Total Mass&#39;,&#39;Total Material Cost&#39;],
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 			&#39;Values&#39;: [opt_problem.PMSG.P_gennom/1000000,opt_problem.PMSG.n_s,opt_problem.PMSG.d_s*1000,opt_problem.PMSG.b_st*1000,opt_problem.PMSG.t_ws*1000,opt_problem.PMSG.n_r,opt_problem.PMSG.d_r*1000,opt_problem.PMSG.b_r*1000,opt_problem.PMSG.t_wr*1000,opt_problem.PMSG.Stator_delta_radial*1000,opt_problem.PMSG.Stator_delta_axial*1000,opt_problem.PMSG.Stator_circum*1000,opt_problem.PMSG.Rotor_delta_radial*1000,opt_problem.PMSG.Rotor_delta_axial*1000,opt_problem.PMSG.Rotor_circum*1000,2*opt_problem.PMSG.r_s,opt_problem.PMSG.R_out*2,opt_problem.PMSG.l_s,opt_problem.PMSG.K_rad,opt_problem.PMSG.Slot_aspect_ratio,opt_problem.PMSG.tau_p*1000,opt_problem.PMSG.h_s*1000,opt_problem.PMSG.b_s*1000,opt_problem.PMSG.b_t*1000,opt_problem.PMSG.t_s*1000,opt_problem.PMSG.t*1000,opt_problem.PMSG.h_m*1000,opt_problem.PMSG.b_m*1000,opt_problem.PMSG.B_g,opt_problem.PMSG.B_symax,opt_problem.PMSG.B_rymax,opt_problem.PMSG.B_pm1,opt_problem.PMSG.B_smax,opt_problem.PMSG.B_tmax,opt_problem.PMSG.p,opt_problem.PMSG.f,opt_problem.PMSG.E_p,opt_problem.PMSG.I_s,opt_problem.PMSG.R_s,opt_problem.PMSG.L_s,opt_problem.PMSG.S,opt_problem.PMSG.N_s,opt_problem.PMSG.A_Cuscalc,opt_problem.PMSG.J_s,opt_problem.PMSG.A_1/1000,opt_problem.PMSG.gen_eff,opt_problem.PMSG.Iron/1000,opt_problem.PMSG.mass_PM/1000,opt_problem.PMSG.Copper/1000,opt_problem.PMSG.Structural_mass/1000,opt_problem.PMSG.Mass/1000,opt_problem.PMSG_Cost.Costs/1000],
 				&#39;Limit&#39;: [&#39;&#39;,&#39;&#39;,&#39;&#39;,opt_problem.PMSG.b_all_s*1000,&#39;&#39;,&#39;&#39;,&#39;&#39;,opt_problem.PMSG.b_all_r*1000,&#39;&#39;,opt_problem.PMSG.u_all_s*1000,opt_problem.PMSG.y_all*1000,opt_problem.PMSG.z_all_s*1000,opt_problem.PMSG.u_all_r*1000,opt_problem.PMSG.y_all*1000,opt_problem.PMSG.z_all_r*1000,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;(0.2-0.27)&#39;,&#39;(4-10)&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&lt;2&#39;,&#39;&lt;2&#39;,&#39;&lt;2&#39;,opt_problem.PMSG.B_g,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&gt;500&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;5&#39;,&#39;3-6&#39;,&#39;60&#39;,&#39;&gt;93%&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;,&#39;&#39;],
 				&#39;Units&#39;:[&#39;MW&#39;,&#39;unit&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;m&#39;,&#39;m&#39;,&#39;m&#39;,&#39;&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;-&#39;,&#39;Hz&#39;,&#39;V&#39;,&#39;A&#39;,&#39;ohm/phase&#39;,&#39;p.u&#39;,&#39;A/mm^2&#39;,&#39;slots&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;kA/m&#39;,&#39;%&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;tons&#39;,&#39;k$&#39;]}
 	df=pd.DataFrame(raw_data, columns=[&#39;Parameters&#39;,&#39;Values&#39;,&#39;Limit&#39;,&#39;Units&#39;])
 print df
-<<<<<<< HEAD
-=======
-
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 </pre></div>
 </div>
 <p>The results should appear as below listing the parameters together with their limits where applicable:</p>
@@ -205,12 +176,7 @@ high speed shaft speed( or gear ratio).It also requires specification of shear s
 The main design variables are initialized with an objective and driver. The designs are computed analytically and checked against predefined constraints
 to meet objective functions.In addition, calculations of mass properties are also made.
 We now instantiate the DFIG object which automatically updates the mass, costs, efficiency and performance variables based on the supplied inputs.</p>
-<<<<<<< HEAD
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># # Initial design values for a DFIG designed for a 5MW turbine</span>
-=======
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="c"># # Initial design values for a DFIG designed for a 5MW turbine</span>
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 
 <span class="n">opt_problem</span> <span class="o">=</span> <span class="n">DFIG_Opt</span><span class="p">(</span><span class="s">&#39;CONMINdriver&#39;</span><span class="p">,</span><span class="s">&#39;DFIG_Cost.Costs&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>    <span class="c"># Optimiser and Objective function</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">Eta_target</span><span class="o">=</span><span class="mi">93</span>														<span class="c"># Target overall drivetrain efficiency</span>
@@ -233,20 +199,10 @@ We now instantiate the DFIG object which automatically updates the mass, costs, 
 <span class="c">#Material properties</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Fe</span> <span class="o">=</span> <span class="mi">7700</span>                 					<span class="c">#Steel density</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">rho_Copper</span> <span class="o">=</span><span class="mi">8900</span>                  			<span class="c"># Kg/m3 copper density</span>
-<<<<<<< HEAD
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#Run optimization</span>
 <span class="n">opt_problem</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-=======
-
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>
-<span class="c">#Run optimization</span>
-<span class="n">opt_problem</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 </pre></div>
 </div>
 <p>The resulting system and component properties can then be printed.</p>
@@ -256,10 +212,6 @@ We now instantiate the DFIG object which automatically updates the mass, costs, 
 				&#39;Units&#39;:[&#39;MW&#39;,&#39;&#39;,&#39;m&#39;,&#39;m&#39;,&#39;-&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;mm&#39;,&#39;-&#39;,&#39;mm&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;T&#39;,&#39;-&#39;,&#39;Hz&#39;,&#39;V&#39;,&#39;A&#39;,&#39;&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;A/mm^2&#39;,&#39;kA/m&#39;,&#39;ohms&#39;,&#39;p.u&#39;,&#39;p.u&#39;,&#39;turns&#39;,&#39;mm^2&#39;,&#39;A&#39;,&#39;&#39;,&#39;A/mm^2&#39;,&#39;ohms&#39;,&#39;p.u&#39;,&#39;%&#39;,&#39;%&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;Tons&#39;,&#39;$1000&#39;]}
 	df=pandas.DataFrame(raw_data, columns=[&#39;Parameters&#39;,&#39;Values&#39;,&#39;Limit&#39;,&#39;Units&#39;])
 	print(df)
-<<<<<<< HEAD
-=======
-
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
 </pre></div>
 </div>
 <p>The optimized design dimensions together with the performance parameters are printed on screen and available in an output file in a Microsoft Excel format(file name [DFIG_5.0MW.xlsx]).
@@ -375,13 +327,8 @@ The results should appear as below listing the parameters together with their li
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2017, NREL.
-<<<<<<< HEAD
       Last updated on Jan 02, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
-=======
-      Last updated on Nov 29, 2017.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
->>>>>>> ef9aacd0d8617e91240e9c42d22dd37e0b202cb3
     </div>
   </body>
 </html>
